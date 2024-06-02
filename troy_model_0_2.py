@@ -103,8 +103,9 @@ if prompt := st.chat_input(CHATBOT_PROMPT):
                 image_data = client.files.content(image_file_id)
                 image_data_bytes = image_data.read()
 
-                with open(chart_out_path, "wb") as file:
-                    file.write(image_data_bytes)
+                # This doesn't work with a deployed TroyAI app.
+                # with open(chart_out_path, "wb") as file:
+                #     file.write(image_data_bytes)
 
                 # Display assistant response in chat message container
                 with st.chat_message("assistant"):
@@ -113,7 +114,7 @@ if prompt := st.chat_input(CHATBOT_PROMPT):
                 st.session_state.messages.append(
                     {
                         "role": "assistant",
-                        "content": image_data_bytes,
                         "type": "image_file",
+                        "content": image_data_bytes,
                     }
                 )
