@@ -5,6 +5,9 @@ from openai import OpenAI
 
 CHATBOT_PROMPT = "How can TroyAI help?"
 
+# Initialize Streamlit app
+st.title("TroyAI Demo")
+
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -16,9 +19,6 @@ assistant = client.beta.assistants.create(
     tools=[{"type": "code_interpreter"}],
     model="gpt-3.5-turbo-0125",  # this is currently the cheapest model
 )
-
-# Initialize Streamlit app
-st.title("TroyAI Demo")
 
 # Initialize chat history
 if "messages" not in st.session_state:
