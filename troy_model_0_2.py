@@ -3,22 +3,29 @@ import os
 import streamlit as st
 from openai import OpenAI
 
+ASSISTANT_NAME = "TroyAI"
+ASSISTANT_DESCRIPTION = "You are TroyAI, you help restaurants."
+ASSISTANT_INSTRUCTIONS = "Try to be clear and brief. Don't invent data."
+ASSISTANT_MODEL = "gpt-3.5-turbo-0125"  # this is currently the cheapest model
+
+CHATBOT_TITLE = "TroyAI Demo"
 CHATBOT_PROMPT = "How can TroyAI help?"
 
-# Initialize Streamlit app
-st.title("TroyAI Demo")
-
 # Initialize OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+openai_api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=openai_api_key)
 
 # Create OpenAI assistant
 assistant = client.beta.assistants.create(
-    name="Troy AI",
-    description="You are Troy AI, you help restaurants.",
-    instructions="Try to be clear and brief. Don't invent data.",
+    name=ASSISTANT_NAME,
+    description=ASSISTANT_DESCRIPTION,
+    instructions=ASSISTANT_INSTRUCTIONS,
+    model=ASSISTANT_MODEL,
     tools=[{"type": "code_interpreter"}],
-    model="gpt-3.5-turbo-0125",  # this is currently the cheapest model
 )
+
+# Initialize Streamlit app
+st.title(CHATBOT_TITLE)
 
 # Initialize chat history
 if "messages" not in st.session_state:
