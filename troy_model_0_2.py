@@ -44,7 +44,8 @@ for message in st.session_state.messages:
         elif message["type"] == "image_file":
             st.image(message["content"])
         else:
-            msg = f"Unknown type: {message["type"]}"
+            unknown_type = message["type"]
+            msg = f"Unknown type: {unknown_type}"
             raise ValueError(msg)
 
 # React to user input
