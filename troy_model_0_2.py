@@ -39,14 +39,23 @@ if "thread_id" not in st.session_state:
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+        if message["type"] == "text":
+            st.markdown(message["content"])
+        elif message["type"] == "image_file":
+            st.image(message["content"])
+        else:
+            msg = f"Unknown type: {message["type"]}"
+            raise ValueError(msg)
 
 # React to user input
 if prompt := st.chat_input(CHATBOT_PROMPT):
     # Display user message in chat message container
     st.chat_message("user").markdown(prompt)
+
     # Add user message to chat history
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    st.session_state.messages.append(
+        {"role": "user", "content": prompt, "type": "text"}
+    )
 
     # Create user message in OpenAI thread
     message = client.beta.threads.messages.create(
@@ -81,14 +90,14 @@ if prompt := st.chat_input(CHATBOT_PROMPT):
                 # Display assistant response in chat message container
                 with st.chat_message("assistant"):
                     st.markdown(response)
+
                 # Add assistant response to chat history
                 st.session_state.messages.append(
-                    {"role": "assistant", "content": response}
+                    {"role": "assistant", "content": response, "type": "text"}
                 )
 
             if msg.type == "image_file":
                 image_file_id = msg.image_file.file_id
-
                 chart_out_path = f"./outputs/{image_file_id}.png"
                 image_data = client.files.content(image_file_id)
                 image_data_bytes = image_data.read()
@@ -98,8 +107,12 @@ if prompt := st.chat_input(CHATBOT_PROMPT):
 
                 # Display assistant response in chat message container
                 with st.chat_message("assistant"):
-                    st.image(chart_out_path)
+                    st.image(image_data_bytes)
                 # Add assistant response to chat history
                 st.session_state.messages.append(
-                    {"role": "assistant", "content": f"![image]({chart_out_path})"}
+                    {
+                        "role": "assistant",
+                        "content": image_data_bytes,
+                        "type": "image_file",
+                    }
                 )
