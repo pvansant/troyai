@@ -1,3 +1,4 @@
+"""Cleaned up version of the simple OpenAI Chatbot."""
 import os
 
 import streamlit as st
@@ -7,6 +8,7 @@ ASSISTANT_NAME = "TroyAI"
 ASSISTANT_DESCRIPTION = "You are TroyAI, you help restaurants."
 ASSISTANT_INSTRUCTIONS = "Try to be clear and brief. Don't invent data."
 ASSISTANT_MODEL = "gpt-3.5-turbo-0125"  # this is currently the cheapest model
+# ASSISTANT_MODEL = "gpt-4o"  # this is more advanced (but more expensive)
 
 CHATBOT_TITLE = "TroyAI Demo"
 CHATBOT_PROMPT = "How can TroyAI help?"
